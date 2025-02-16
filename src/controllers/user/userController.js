@@ -33,7 +33,6 @@ const userController = {
 
    deleteUser : async(req, res) => {
       try {
-         // const email = req.body.email
          const user = await User.findOneAndDelete({email: req.body.email})
          if(user) {
             return response.successResponse(res, "Users deleted successfully", user)
