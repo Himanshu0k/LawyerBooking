@@ -2,6 +2,7 @@ import User from "../../models/user.js";
 import Lawyer from "../../models/lawyer.js";
 import comparePassword from "../../middlewares/password/comparePassword.js";
 import response from "../../middlewares/response.js";
+import { generateToken } from "../../middlewares/tokenVarification.js";
 
 const loginController = {
    userLogin: async (req, res) => {
@@ -13,8 +14,8 @@ const loginController = {
          }
          else {
             if(await comparePassword(password, user.password)) {
-               // return res.status(200).json({message: 'Login successfull'})
-               return response.successResponse(res, "Login successfull")
+               const token = generateToken({ email: user.email, id: user._id , role: user.role});
+               return response.successResponse(res, "Login successfull, Welcome USER", token)
             }
             else {
                return response.errorResponse(res, "Invalid Credentials")
@@ -35,8 +36,8 @@ const loginController = {
          }
          else {
             if(await comparePassword(password, lawyer.password)) {
-               // return res.status(200).json({message: 'Login successfull'})
-               return response.successResponse(res, "Login successfull")
+               const token = generateToken({ email: lawyer.email, id: lawyer._id , role: lawyer.role});
+               return response.successResponse(res, "Login successfull", token)
             }
             else {
                return response.errorResponse(res, "Invalid Credentials")

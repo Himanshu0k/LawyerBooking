@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema({
    picturePath:{
       type: String,
       default: "",
+   }, 
+   role: {
+      type: String,
+      default: "user"
    }
 })
 

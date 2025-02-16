@@ -50,6 +50,10 @@ const lawyerSchema = new mongoose.Schema({
    fees: {
       type: Number,
       required: true
+   },
+   role: {
+      type: String,
+      default: "lawyer"
    }
 })
 

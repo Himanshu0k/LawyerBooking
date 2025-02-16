@@ -35,6 +35,9 @@ const lawyerController = {
    deleteLawyer : async(req, res) => {
       try {
          const lawyer = await Lawyer.findOneAndDelete({email: req.body.email})
+         if(!lawyer) {
+            return response.errorResponse(res, "User does not exist")
+         }
          return response.successResponse(res, "Lawyer deleted successfully", lawyer)
       }
       catch(error) {
