@@ -1,5 +1,6 @@
 import User from "../../models/user.js"
 import hashPassword from "../../middlewares/password/hashPassword.js"
+import response from "../../middlewares/response.js"
 
 const userController = {
    addUser : async (req, res) => {
@@ -9,24 +10,24 @@ const userController = {
          if(!userExist) {
             user.password = await hashPassword(user.password)
             await user.save()
-            return res.status(200).json({message: "User added successfully", user})
+            return response.successResponse(res, "User added successfully", user)
          }
          else {
-            return res.status(400).json({message: "User already exists"})
+            return response.errorResponse(res, "User already exists")
          }
       }
       catch(error) {
-         return res.status(500).json({message: error.message})
+         return response.errorResponse(res, error.message)
       }
    },
 
    getUser : async (req, res) => {
       try {
          const users = await User.find()
-         return res.status(200).json({message: "Fetched users successfully", users})
+         return response.successResponse(res, "Users fetched successfully", users)
       }
       catch(error) {
-         return res.status(500).json({message: error.message})
+         return response.errorResponse(res, error.message)
       }
    },
 
@@ -35,14 +36,14 @@ const userController = {
          // const email = req.body.email
          const user = await User.findOneAndDelete({email: req.body.email})
          if(user) {
-            return res.status(200).json({message: "user deleted successfully", user})
+            return response.successResponse(res, "Users deleted successfully", user)
          }
          else {
-            return res.status(400).json({message: "User does not exist"})
+            return response.errorResponse(res, "User does not exist")
          }
       }
       catch(error) {
-         return res.status(500).json({message: error.message})
+         return response.errorResponse(res, error.message)
       }
    }
 }

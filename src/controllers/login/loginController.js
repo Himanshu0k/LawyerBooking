@@ -1,6 +1,7 @@
 import User from "../../models/user.js";
 import Lawyer from "../../models/lawyer.js";
 import comparePassword from "../../middlewares/password/comparePassword.js";
+import response from "../../middlewares/response.js";
 
 const loginController = {
    userLogin: async (req, res) => {
@@ -8,19 +9,20 @@ const loginController = {
          const {email, password} = req.body;
          const user = await User.findOne({email: email})
          if(!user) {
-            return res.status(400).json({message: "User does not exist"});
+            return response.errorResponse(res, "User does not exist")
          }
          else {
             if(await comparePassword(password, user.password)) {
-               return res.status(200).json({message: 'Login successfull'})
+               // return res.status(200).json({message: 'Login successfull'})
+               return response.successResponse(res, "Login successfull")
             }
             else {
-               return res.status(400).json({message: "Invalid Credentials"});
+               return response.errorResponse(res, "Invalid Credentials")
             }
          }
       }
       catch(error) {
-         return res.status(500).json({message: error.message});
+         return response.errorResponse(res, error.message)
       }
    },
 
@@ -29,19 +31,20 @@ const loginController = {
          const {email, password} = req.body;
          const lawyer = await Lawyer.findOne({email: email})
          if(!lawyer) {
-            return res.status(400).json({message: "Lawyer does not exist"});
+            return response.errorResponse(res, "Lawyer does not exist")
          }
          else {
             if(await comparePassword(password, lawyer.password)) {
-               return res.status(200).json({message: 'Login successfull'})
+               // return res.status(200).json({message: 'Login successfull'})
+               return response.successResponse(res, "Login successfull")
             }
             else {
-               return res.status(400).json({message: "Invalid Credentials"});
+               return response.errorResponse(res, "Invalid Credentials")
             }
          }
       }
       catch(error) {
-         return res.status(500).json({message: error.message});
+         return response.errorResponse(res, error.message)
       }
    }
 }
