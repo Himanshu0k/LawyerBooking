@@ -44,6 +44,37 @@ const userController = {
       catch(error) {
          return response.errorResponse(res, error.message)
       }
+   }, 
+
+   updateUser: async(req, res) => {
+      try {
+         const {userId, name, email, dob, password, phoneNumber, address, picturePath} = req.body
+         if(!userId) {
+            return response.errorResponse(res, "User id can not be empty")
+         }
+         const userExist = await User.findOne({
+            email: email,
+            _id: { $ne: userId}
+         })
+         if(userExist){
+            return response.errorResponse(res, "User already exists with this email")
+         }
+
+         const user = await User.findById(userId)
+         user.name = name
+         user.email = email
+         user.dob = dob
+         user.password = password
+         user.phoneNumber = phoneNumber
+         user.address = address 
+         user.picturePath = picturePath
+
+         await user.save()
+         return response.successResponse(res, "User updated successfully", user)
+      }  
+      catch(error) {
+         return response.errorResponse(res, error.message)
+      }
    }
 }
 

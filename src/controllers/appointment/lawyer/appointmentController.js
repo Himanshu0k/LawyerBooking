@@ -21,7 +21,7 @@ const appointmentController = {
          if (appointment.lawyerId.toString() !== lawyerId) {
             return response.errorResponse(res, "You are not authorized to approve this appointment");
          }
-         if (appointment.status === "Approved") {
+         if (appointment.status === "approved") {
             return response.successResponse(res, "Appointment is already approved", appointment);
          }
          appointment.status = "approved";

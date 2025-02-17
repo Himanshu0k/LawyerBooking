@@ -43,7 +43,49 @@ const lawyerController = {
       catch(error) {
          return response.errorResponse(res, error.message)
       }
+   },
+
+   updateLawyer: async (req, res) => {
+      try {
+        const { lawyerId, name, email, dob, password, phoneNumber, address, picturePath, fees, experience} = req.body;
+    
+      if (!lawyerId) {
+         return response.errorResponse(res, "Lawyer id cannot be empty");
+      }
+    
+      const lawyerExist = await Lawyer.findOne({ 
+         email: email, 
+         _id: { $ne: lawyerId } 
+      });
+      if (lawyerExist) {
+         return response.errorResponse(res, "Lawyer already exists with this email");
+      }
+    
+      const lawyer = await Lawyer.findById(lawyerId);
+      if (!lawyer) {
+         return response.errorResponse(res, "Lawyer not found");
+      }
+    
+      lawyer.name = name ;
+      lawyer.email = email
+      lawyer.dob = dob 
+      lawyer.password = password
+      lawyer.phoneNumber = phoneNumber
+      lawyer.address = address 
+      lawyer.picturePath = picturePath
+      lawyer.fees = fees 
+      lawyer.experience = experience
+    
+      await lawyer.save();
+    
+      return response.successResponse(res, "Lawyer updated successfully", lawyer);
+      } 
+      catch (error) {
+         console.error(error);
+         return response.errorResponse(res, error.message);
+      }
    }
+    
 }  
 
 export default lawyerController
