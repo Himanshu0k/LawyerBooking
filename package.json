@@ -6,5 +6,10 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "glob": "^11.0.1"
   }
 }
+  
+  
