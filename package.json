@@ -1,9 +1,18 @@
 {
   "devDependencies": {
-    "husky": "^8.0.0"
+    "husky": "^8.0.0",
+    "cz-conventional-changelog": "^3.3.0"
   },
   "scripts": {
     "prepare": "husky install",
     "test": "echo 'No tests specified' && exit 0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "glob": "^11.0.1"
   }
 }
