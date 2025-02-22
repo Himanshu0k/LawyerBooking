@@ -205,6 +205,81 @@ const lawyerController = {
       return response.errorResponse(res, error.message);
     }
   },
+
+  /**
+   * @swagger
+   * /lawyer/getLawyerById:
+   *   get:
+   *     summary: Get lawyer by ID
+   *     description: Fetch a lawyer's profile using their ID.
+   *     tags:
+   *       - Lawyers
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               lawyerId:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Lawyer found successfully
+   *       400:
+   *         description: Lawyer not found
+   */
+  getLawyerById: async (req, res) => {
+    try {
+      const { lawyerId } = req.body;
+      const lawyer = await Lawyer.findById(lawyerId);
+      if (!lawyer) {
+        return response.errorResponse(res, "Lawyer not found");
+      }
+      return response.successResponse(res, "Lawyer found successfully", lawyer);
+    } catch (error) {
+      return response.errorResponse(res, error.message);
+    }
+  },
+
+  /**
+   * @swagger
+   * /lawyer/getLawyerByName:
+   *   get:
+   *     summary: Get lawyer by name
+   *     description: Fetch lawyers by a partial or full name search.
+   *     tags:
+   *       - Lawyers
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               lawyerName:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Lawyers found
+   *       400:
+   *         description: No lawyers found
+   */
+  getLawyerByName: async (req, res) => {
+    try {
+      const { lawyerName } = req.body;
+      if (!lawyerName) {
+        return response.errorResponse(res, "Lawyer name is required");
+      }
+      const lawyers = await Lawyer.find({ name: { $regex: new RegExp(lawyerName, "i") } });
+      if (lawyers.length > 0) {
+        return response.successResponse(res, "Lawyers found", lawyers);
+      }
+      return response.errorResponse(res, "No lawyers found with this name");
+    } catch (error) {
+      return response.errorResponse(res, error.message);
+    }
+  },
 };
 
 export default lawyerController;
