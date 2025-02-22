@@ -2,6 +2,35 @@ import Appointment from "../../../models/appointment.js";
 import Lawyer from "../../../models/lawyer.js";
 import response from "../../../middlewares/response.js";
 
+/**
+ * @swagger
+ * /lawyer/appointment/approveAppointment:
+ *   post:
+ *     summary: Approve an appointment
+ *     description: Approves an appointment if the lawyer is authorized and the appointment exists.
+ *     tags:
+ *       - Appointments
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               appointmentId:
+ *                 type: string
+ *                 description: ID of the appointment
+ *               lawyerId:
+ *                 type: string
+ *                 description: ID of the lawyer
+ *     responses:
+ *       200:
+ *         description: Appointment approved successfully
+ *       400:
+ *         description: Bad request due to missing parameters or invalid authorization
+ *       500:
+ *         description: Server error
+ */
 const appointmentController = {
    approveAppointment: async (req, res) => {
       try {
@@ -34,6 +63,31 @@ const appointmentController = {
       }
   },
 
+   /**
+    * @swagger
+    * /lawyer/appointment/getAppointment:
+    *   get:
+    *     summary: Get all appointments for a lawyer
+    *     description: Retrieves all appointments associated with a lawyer based on their email.
+    *     tags:
+    *       - Appointments
+    *     parameters:
+    *       - in: body
+    *         name: email
+    *         required: true
+    *         schema:
+    *           type: string
+    *           description: Lawyer's email
+    *     responses:
+    *       200:
+    *         description: List of all appointments
+    *       400:
+    *         description: Lawyer does not exist
+    *       404:
+    *         description: No appointments found
+    *       500:
+    *         description: Server error
+    */
    getAllApointments: async (req, res) => {
       try {
          const email = req.body.email
@@ -56,4 +110,4 @@ const appointmentController = {
    }
 }
 
-export default appointmentController
+export default appointmentController;
